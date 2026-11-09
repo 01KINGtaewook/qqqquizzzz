@@ -87,6 +87,7 @@
             <div class="flex items-center gap-2">
               <span class="text-lg font-extrabold text-amber-400" id="hostRoundTitle">ROUND 1</span>
               <button onclick="nextRound()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-bold">다음 라운드 (+1) & 답안 비우기</button>
+              <button onclick="resetRoundToOne()" class="px-3 py-1.5 bg-rose-700/70 hover:bg-rose-700 rounded-lg text-xs font-bold text-white ml-1">🔄 라운드 1로 리셋</button>
             </div>
             <div class="flex items-center gap-2">
               <select id="modeSelect" onchange="updateQuizConfig()" class="bg-slate-900 border border-slate-600 rounded-lg px-3 py-1.5 text-sm font-bold text-amber-300">
@@ -171,7 +172,7 @@
       appId: "1:212339612106:web:522e0594cf9ad10e569733"
     };
 
-    const HOST_PIN = "7777"; // 사회자 화면 진입 비밀번호 (원하는 번호로 변경 가능)
+    const HOST_PIN = "1234"; // 사회자 화면 진입 비밀번호 (원하는 번호로 변경 가능)
 
     // 앱 및 DB 초기화
     const app = initializeApp(firebaseConfig);
@@ -281,6 +282,16 @@
       remove(subsRef);
       update(stateRef, {
         round: (currentState.round || 1) + 1,
+        isOpen: false
+      });
+      document.getElementById("correctAnswerInput").value = "";
+    };
+
+    window.resetRoundToOne = () => {
+      if (!confirm("라운드를 1라운드로 되돌리고 현재 답안을 비울까요?")) return;
+      remove(subsRef);
+      update(stateRef, {
+        round: 1,
         isOpen: false
       });
       document.getElementById("correctAnswerInput").value = "";
